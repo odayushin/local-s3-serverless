@@ -1,0 +1,60 @@
+service: s3event-hook
+configValidationMode: error
+
+frameworkVersion: '2'
+
+plugins:
+  - serverless-offline
+  - serverless-s3-local
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: ap-northeast-1
+  lambdaHashingVersion: 20201221
+
+# you can add statements to the Lambda function's IAM Role here
+#  iamRoleStatements:
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:ListBucket"
+#      Resource: { "Fn::Join" : ["", ["arn:aws:s3:::", { "Ref" : "ServerlessDeploymentBucket" } ] ]  }
+#    - Effect: "Allow"
+#      Action:
+#        - "s3:PutObject"
+#      Resource:
+#        Fn::Join:
+#          - ""
+#          - - "arn:aws:s3:::"
+#            - "Ref" : "ServerlessDeploymentBucket"
+#            - "/*"
+
+custom:
+  serverless-offline:
+    httpPort: 8080
+    noPrependStageInUrl: true
+  s3:
+    host: localhost
+    directory: ./
+
+resources:
+  Resources:
+    NewResource:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: local-bucket
+
+functions:
+  webhook:
+    handler: handler.webhook
+    events:
+      - http:
+          method: get
+          path: /
+  hello:
+    handler: handler.hello
+    events:
+      - s3:
+          bucket: local-bucket
+          event: s3:Put*
