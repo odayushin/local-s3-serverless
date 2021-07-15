@@ -1,11 +1,12 @@
 service: s3event-hook
 configValidationMode: error
 
-frameworkVersion: '2'
+frameworkVersion: "2"
 
 plugins:
   - serverless-offline
   - serverless-s3-local
+  - serverless-dynamodb-local
 
 provider:
   name: aws
@@ -37,6 +38,19 @@ custom:
   s3:
     host: localhost
     directory: ./
+  dynamodb:
+    stages:
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+      seed: true
+    seed:
+      development:
+        sources:
+          - table: SomeTable
+            sources: [./migrations/records.json]
 
 resources:
   Resources:
@@ -44,6 +58,20 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         BucketName: local-bucket
+      Resources:
+    SomeTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: SomeTable
+        AttributeDefinitions:
+          - AttributeName: attr1
+            AttributeType: S
+        KeySchema:
+          - AttributeName: attr1
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 functions:
   webhook:

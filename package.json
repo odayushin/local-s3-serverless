@@ -5,7 +5,9 @@
   "main": "handler.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "$(npm bin)/sls offline"
+    "dynamodb": "$(npm bin)/serverless dynamodb start &",
+    "start": "npm run dynamodb && $(npm bin)/sls offline",
+    "setup": "$(npm bin)/serverless dynamodb install"
   },
   "keywords": [],
   "author": "",
@@ -15,6 +17,7 @@
     "fs": "0.0.1-security",
     "serverless": "^2.51.2",
     "serverless-offline": "^7.0.0",
-    "serverless-s3-local": "^0.6.18"
+    "serverless-s3-local": "^0.6.18",
+    "serverless-dynamodb-local": "^0.2.40"
   }
 }
