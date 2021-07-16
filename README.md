@@ -4,6 +4,7 @@
 
 ```
 $ npm install
+$ npm run setup
 ```
 
 ## 起動
