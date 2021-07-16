@@ -75,7 +75,7 @@ resources:
 
 functions:
   webhook:
-    handler: handler.webhook
+    handler: webhook_handler.webhook
     events:
       - http:
           method: get
