@@ -37,7 +37,7 @@ custom:
     noPrependStageInUrl: true
   s3:
     host: localhost
-    directory: ./
+    directory: ./local_s3
   dynamodb:
     stages:
       - dev

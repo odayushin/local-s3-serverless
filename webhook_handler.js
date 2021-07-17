@@ -9,7 +9,7 @@ const s3Client = new AWS.S3({
 });
 
 module.exports.webhook = async (event, context, callback) => {
-  const uploadFile = fs.readFileSync("./upload_data.json");
+  const uploadFile = fs.readFileSync("./upload_data/upload_data.json");
   const params = {
     Bucket: "local-bucket",
     Key: "upload_data.json",
